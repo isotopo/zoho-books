@@ -10,9 +10,11 @@ class ZohoBooks {
   /**
    * @constructor
    * @param {Object} options - Options for connection
+   * @param {String} options.authtoken - Zohobooks authtoken
+   * @param {String} options.host - Host
    */
   constructor (options) {
-    this.options = options
+    this.options = typeof options !== 'object' ? {} : options
   }
 
   /**
@@ -26,22 +28,23 @@ class ZohoBooks {
       EMAIL_ID: email,
       PASSWORD: password
     })
-    .then(function (res) {
-      let json = {}
-      res.split('\n').forEach(function (value) {
-        value = value.split('=')
-        if (value.length > 1) {
-          json[value[0].toLowerCase()] = value[1]
+      .then(function (res) {
+        let json = {}
+        res.split('\n').forEach(function (value) {
+          value = value.split('=')
+          if (value.length > 1) {
+            json[value[0].toLowerCase()] = value[1]
+          }
+        })
+        if (!json.authtoken) {
+          return Promise.reject(json)
         }
+        this.options.authtoken = json.authtoken
+        return Promise.resolve(json)
       })
-      if (!json.authtoken) {
-        return Promise.reject(json)
-      }
-      return Promise.resolve(json)
-    })
-    .catch(function (err) {
-      return Promise.reject(err)
-    })
+      .catch(function (err) {
+        return Promise.reject(err)
+      })
   }
 
   /**
@@ -49,12 +52,20 @@ class ZohoBooks {
    * @memberof ZohoBooks
    * @param {String} url - Zoho books API path
    * @param {String} method - Http method
-   * @param {Object} data - Data to send
    * @param {Object} qs - http query
    */
-  api (url, method, data, qs) {
+  api (url, method, data) {
+    let qs = {}
     url = this.options.host + url
-    return this._request(url, method, data, qs)
+    qs.authtoken = this.options.authtoken
+    qs.JSONString = JSON.stringify(data)
+    qs.organization_id = this.options.organization
+    return this._request(url, method, qs).then((res) => {
+      return res.code === 0 ? Promise.resolve(res) : Promise.reject(res)
+    })
+      .catch(function (err) {
+        return Promise.reject(err)
+      })
   }
 
   /**
@@ -62,14 +73,13 @@ class ZohoBooks {
    * @private
    * @param {String} url - Complete url path
    * @param {String} method - Http method
-   * @param {Object} data - Data to send
    * @param {Object} qs - http query
    */
-  _request (url, method, data, qs) {
+  _request (url, method, qs) {
     let toSend = {
       method: method,
       uri: url,
-      json: data || true
+      json: true
     }
     if (qs) {
       toSend.qs = qs
