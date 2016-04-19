@@ -1,12 +1,13 @@
+![Zoho books](http://res.cloudinary.com/cloudinary4yopping/image/upload/v1461090871/logos/zoho-books-logo.png)
+
 # Zoho-books
 
 Node.js zoho books helper library
 
-[![npm version](https://badge.fury.io/js/zoho.svg)](http://badge.fury.io/js/zoho)
-[![Build Status](https://travis-ci.org/4yopping/zoho.svg)](https://travis-ci.org/4yopping/zoho)
-[![Join the chat at https://gitter.im/4yopping/zoho](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/4yopping/zoho?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Inline docs](http://inch-ci.org/github/4yopping/zoho.svg?branch=master)](http://inch-ci.org/github/4yopping/zoho)
-![Dependencies](https://david-dm.org/4yopping/zoho.svg)
+[![npm version](https://badge.fury.io/js/zoho-books.svg)](https://badge.fury.io/js/zoho-books)
+[![Build Status](https://travis-ci.org/4yopping/zoho-books.svg?branch=master)](https://travis-ci.org/4yopping/zoho-books)
+[![Inline docs](http://inch-ci.org/github/4yopping/zoho-books.svg?branch=master)](http://inch-ci.org/github/4yopping/zoho-books)
+![Dependencies](https://david-dm.org/4yopping/zoho-books.svg)
 
 ## Installation
 
@@ -52,18 +53,6 @@ let auth = yield zohoBooks.createToken('your@email.com', 'YourPassword3000')
 ```
 **Warning be careful with this method zoho limits requests to this endpoint**
 
-
-### Create Organization method
-
-If you requires create a new organization you should use the method `createOrganization`
-instead `api('/organization', 'POST')`
-
-```js
-let org = yield zohoBooks.createOrganization({
-
-})
-```
-**Warning be careful with this method zoho limits requests to this endpoint**
 
 ## License
 
