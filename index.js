@@ -12,6 +12,7 @@ class ZohoBooks {
    * @param {Object} options - Options for connection
    * @param {String} options.authtoken - Zohobooks authtoken
    * @param {String} options.host - Host
+   * @param {String} options.organization - Organization id
    */
   constructor (options) {
     this.options = typeof options !== 'object' ? {} : options
@@ -23,7 +24,7 @@ class ZohoBooks {
    * @param {String} password - Password
    */
   createToken (email, password) {
-    return this._request('https://accounts.zoho.com/apiauthtoken/nb/create', 'GET', true, {
+    return this._request('https://accounts.zoho.com/apiauthtoken/nb/create', 'GET', {
       SCOPE: 'ZohoBooks/booksapi',
       EMAIL_ID: email,
       PASSWORD: password
@@ -60,9 +61,10 @@ class ZohoBooks {
     qs.authtoken = this.options.authtoken
     qs.JSONString = JSON.stringify(data)
     qs.organization_id = this.options.organization
-    return this._request(url, method, qs).then((res) => {
-      return res.code === 0 ? Promise.resolve(res) : Promise.reject(res)
-    })
+    return this._request(url, method, qs)
+      .then((res) => {
+        return res.code === 0 ? Promise.resolve(res) : Promise.reject(res)
+      })
       .catch(function (err) {
         return Promise.reject(err)
       })
