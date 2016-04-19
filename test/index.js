@@ -354,9 +354,99 @@ describe('Zohobooks service test', function () {
   })
 
   /*
+   * Credit notes Group
+   */
+  describe('Group credit notes [test-creditnotes]', function () {
+    it('Should create a credit note', function (done) {
+      zohobooks.api('/creditnotes', 'POST', {
+        customer_id: global.fixtures.contact.contact_id,
+          // invoice_id: global.fixtures.invoice.invoice_id,
+          // ignore_auto_number_generation: false,
+        line_items: [{
+            item_id: global.fixtures.item.item_id,
+            name: global.fixtures.item.name
+          }]
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.creditnote, 'object')
+          global.fixtures.creditnote = val.creditnote
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should get all credit notes', function (done) {
+      zohobooks.api('/creditnotes', 'GET')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert(Array.isArray(val.creditnotes))
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should get specific credit note', function (done) {
+      zohobooks.api(`/creditnotes/${global.fixtures.creditnote.creditnote_id}`, 'GET')
+        .then(function (val) {
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.creditnote, 'object')
+          assert.equal(val.creditnote.creditnote_id, global.fixtures.creditnote.creditnote_id)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should update an credit note', function (done) {
+      let newLineItems = [{
+        item_id: global.fixtures.item.item_id,
+        name: global.fixtures.item.name
+      }, {
+        item_id: global.fixtures.item2.item_id,
+        name: global.fixtures.item2.name
+      }]
+      zohobooks.api(`/creditnotes/${global.fixtures.creditnote.creditnote_id}`, 'PUT', {
+        line_items: newLineItems
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.creditnote, 'object')
+          assert.equal(val.creditnote.line_items.length, 2)
+          assert.equal(val.creditnote.line_items[0].item_id, global.fixtures.item.item_id)
+          assert.equal(val.creditnote.line_items[1].item_id, global.fixtures.item2.item_id)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+  })
+
+  /*
    * Remove Group
    */
   describe('Group remove [test-remove]', function () {
+    it('Should delete a credit note [test-creditnotes]', function (done) {
+      zohobooks.api(`/creditnotes/${global.fixtures.creditnote.creditnote_id}`, 'DELETE')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
     it('Should delete a customer payment [test-customerpayment]', function (done) {
       zohobooks.api(`/customerpayments/${global.fixtures.customerpayment.payment_id}`, 'DELETE')
         .then(function (val) {
