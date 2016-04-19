@@ -143,9 +143,9 @@ describe('Zohobooks service test', function () {
       zohobooks.api('/salesorders', 'POST', {
         customer_id: global.fixtures.contact.contact_id,
         line_items: [{
-            item_id: global.fixtures.item.item_id,
-            name: global.fixtures.item.name
-          }]
+          item_id: global.fixtures.item.item_id,
+          name: global.fixtures.item.name
+        }]
       })
         .then(function (val) {
           assert(val)
@@ -285,9 +285,9 @@ describe('Zohobooks service test', function () {
       zohobooks.api('/invoices', 'POST', {
         customer_id: global.fixtures.contact.contact_id,
         line_items: [{
-            item_id: global.fixtures.item.item_id,
-            name: global.fixtures.item.name
-          }]
+          item_id: global.fixtures.item.item_id,
+          name: global.fixtures.item.name
+        }]
       })
         .then(function (val) {
           assert(val)
@@ -360,12 +360,10 @@ describe('Zohobooks service test', function () {
     it('Should create a credit note', function (done) {
       zohobooks.api('/creditnotes', 'POST', {
         customer_id: global.fixtures.contact.contact_id,
-          // invoice_id: global.fixtures.invoice.invoice_id,
-          // ignore_auto_number_generation: false,
         line_items: [{
-            item_id: global.fixtures.item.item_id,
-            name: global.fixtures.item.name
-          }]
+          item_id: global.fixtures.item.item_id,
+          name: global.fixtures.item.name
+        }]
       })
         .then(function (val) {
           assert(val)
@@ -405,7 +403,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should update an credit note', function (done) {
+    it('Should update a credit note', function (done) {
       let newLineItems = [{
         item_id: global.fixtures.item.item_id,
         name: global.fixtures.item.name
@@ -432,9 +430,200 @@ describe('Zohobooks service test', function () {
   })
 
   /*
+   * Vendor Group
+   */
+  describe('Group vendors [test-vendor]', function () {
+    it('Should create a vendor', function (done) {
+      zohobooks.api('/contacts', 'POST', {
+        contact_name: faker.name.firstName(),
+        contact_type: 'vendor'
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.contact, 'object')
+          assert.equal(val.contact.contact_type, 'vendor')
+          global.fixtures.vendor = val.contact
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should get specific vendor', function (done) {
+      zohobooks.api(`/contacts/${global.fixtures.vendor.contact_id}`, 'GET')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.contact, 'object')
+          assert.equal(val.contact.contact_type, 'vendor')
+          assert.equal(val.contact.contact_id, global.fixtures.vendor.contact_id)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should update a vendor', function (done) {
+      let newName = faker.name.firstName()
+      zohobooks.api(`/contacts/${global.fixtures.vendor.contact_id}`, 'PUT', {
+        contact_name: newName
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.contact, 'object')
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+  })
+
+  /*
+   * Bank Account Order Group
+   */
+  describe('Group bank account [test-bankaccount]', function () {
+    it('Should create an bank account', function (done) {
+      zohobooks.api('/bankaccounts', 'POST', {
+        account_name: faker.lorem.words(10),
+        account_type: 'credit_card',
+        account_number: '80000009823'
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.bankaccount, 'object')
+          global.fixtures.bankaccount = val.bankaccount
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+  })
+
+  /*
+   * Purchase Order Group
+   */
+  describe('Group purchase order  [test-purchaseorder]', function () {
+    it.skip('Should create a purchase order ', function (done) {
+      zohobooks.api('/purchaseorders', 'POST', {
+        vendor_id: global.fixtures.vendor.contact_id,
+        description: faker.lorem.words(10),
+        line_items: [{
+          item_id: global.fixtures.item.item_id,
+          name: global.fixtures.item.name,
+          account_id: global.fixtures.bankaccount.account_id
+        }]
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.purchaseorder, 'object')
+          global.fixtures.purchaseorder = val.purchaseorder
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it.skip('Should get all purchase orders', function (done) {
+      zohobooks.api('/purchaseorders', 'GET')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert(Array.isArray(val.purchaseorders))
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it.skip('Should get specific purchase order', function (done) {
+      zohobooks.api(`/purchaseorders/${global.fixtures.purchaseorder.purchaseorder_id}`, 'GET')
+        .then(function (val) {
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.purchaseorder, 'object')
+          assert.equal(val.purchaseorder.purchaseorder_id, global.fixtures.purchaseorder.purchaseorder_id)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it.skip('Should update a purchase order', function (done) {
+      let newLineItems = [{
+        item_id: global.fixtures.item.item_id,
+        name: global.fixtures.item.name
+      }, {
+        item_id: global.fixtures.item2.item_id,
+        name: global.fixtures.item2.name
+      }]
+      zohobooks.api(`/purchaseorders/${global.fixtures.purchaseorder.purchaseorder_id}`, 'PUT', {
+        line_items: newLineItems
+      })
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          assert.equal(typeof val.purchaseorder, 'object')
+          assert.equal(val.purchaseorder.line_items.length, 2)
+          assert.equal(val.purchaseorder.line_items[0].item_id, global.fixtures.item.item_id)
+          assert.equal(val.purchaseorder.line_items[1].item_id, global.fixtures.item2.item_id)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+  })
+
+  /*
    * Remove Group
    */
   describe('Group remove [test-remove]', function () {
+    it('Should delete a bank account [test-bankaccount]', function (done) {
+      zohobooks.api(`/bankaccounts/${global.fixtures.bankaccount.account_id}`, 'DELETE')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should delete a vendor [test-vendor]', function (done) {
+      zohobooks.api(`/contacts/${global.fixtures.vendor.contact_id}`, 'DELETE')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
+    it('Should delete a purchase order [test-purchaseorder]', function (done) {
+      zohobooks.api(`/purchaseorders/${global.fixtures.purchaseorder.purchaseorder_id}`, 'DELETE')
+        .then(function (val) {
+          assert(val)
+          assert.equal(val.code, 0)
+          done()
+        })
+        .catch(function (err) {
+          done(err)
+        })
+    })
+
     it('Should delete a credit note [test-creditnotes]', function (done) {
       zohobooks.api(`/creditnotes/${global.fixtures.creditnote.creditnote_id}`, 'DELETE')
         .then(function (val) {
