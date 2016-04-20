@@ -612,7 +612,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a purchase order [test-purchaseorder]', function (done) {
+    it.skip('Should delete a purchase order [test-purchaseorder]', function (done) {
       zohobooks.api(`/purchaseorders/${global.fixtures.purchaseorder.purchaseorder_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
