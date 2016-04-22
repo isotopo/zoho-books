@@ -588,7 +588,7 @@ describe('Zohobooks service test', function () {
    * Remove Group
    */
   describe('Group remove [test-remove]', function () {
-    it('Should delete a bank account [test-bankaccount]', function (done) {
+    it.skip('Should delete a bank account [test-bankaccount]', function (done) {
       zohobooks.api(`/bankaccounts/${global.fixtures.bankaccount.account_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -600,7 +600,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a vendor [test-vendor]', function (done) {
+    it.skip('Should delete a vendor [test-vendor]', function (done) {
       zohobooks.api(`/contacts/${global.fixtures.vendor.contact_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -624,7 +624,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a credit note [test-creditnotes]', function (done) {
+    it.skip('Should delete a credit note [test-creditnotes]', function (done) {
       zohobooks.api(`/creditnotes/${global.fixtures.creditnote.creditnote_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -636,7 +636,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a customer payment [test-customerpayment]', function (done) {
+    it.skip('Should delete a customer payment [test-customerpayment]', function (done) {
       zohobooks.api(`/customerpayments/${global.fixtures.customerpayment.payment_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -648,7 +648,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete an invoice [test-invoice]', function (done) {
+    it.skip('Should delete an invoice [test-invoice]', function (done) {
       zohobooks.api(`/invoices/${global.fixtures.invoice.invoice_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -660,7 +660,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a sales order [test-salesorder]', function (done) {
+    it.skip('Should delete a sales order [test-salesorder]', function (done) {
       zohobooks.api(`/salesorders/${global.fixtures.salesorder.salesorder_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -672,7 +672,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete an item [test-item]', function (done) {
+    it.skip('Should delete an item [test-item]', function (done) {
       zohobooks.api(`/items/${global.fixtures.item.item_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -684,7 +684,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete another item [test-item]', function (done) {
+    it.skip('Should delete another item [test-item]', function (done) {
       zohobooks.api(`/items/${global.fixtures.item2.item_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
@@ -696,7 +696,7 @@ describe('Zohobooks service test', function () {
         })
     })
 
-    it('Should delete a contact [test-contact]', function (done) {
+    it.skip('Should delete a contact [test-contact]', function (done) {
       zohobooks.api(`/contacts/${global.fixtures.contact.contact_id}`, 'DELETE')
         .then(function (val) {
           assert(val)
