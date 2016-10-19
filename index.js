@@ -56,12 +56,36 @@ class ZohoBooks {
    * @param {Object} qs - http query
    */
   api (url, method, data) {
-    let qs = {}
-    url = this.options.host + url
-    qs.authtoken = this.options.authtoken
-    qs.JSONString = JSON.stringify(data)
-    qs.organization_id = this.options.organization
-    return this._request(url, method, qs)
+    data = data || {}
+
+    /** Set query string object */
+    let qs = {
+      authtoken: this.options.authtoken,
+      organization_id: this.options.organization
+    }
+
+    /** Set pagination options */
+    if (data.pagination) {
+      for (let prop in data.pagination) {
+        data.pagination[prop] && (qs[prop] = data.pagination[prop])
+      }
+
+      delete data.pagination
+    }
+
+    /** Set filters */
+    if (data.filters) {
+      for (let prop in data.filters) {
+        !qs[prop] && data.filters[prop] && (qs[prop] = data.filters[prop])
+      }
+
+      delete data.filters
+    }
+
+    /** Set JSONString */
+    Object.keys(data).length && (qs.JSONString = JSON.stringify(data))
+
+    return this._request(this.options.host + url, method, qs)
       .then((res) => {
         return res.code === 0 ? Promise.resolve(res) : Promise.reject(res)
       })
